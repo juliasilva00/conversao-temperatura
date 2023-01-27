@@ -3,17 +3,30 @@ kind: Deployment
 metadata:
   name: meudeployment
 spec:
-  replicas: 1
+  replicas: 2
   selector: 
     matchLabels:
-      app: web
+      app: web-app
   template:
     metadata:
       labels:
-        app: web
+        app: web-app
     spec:
       containers:
        - name: site
          image: juliasantos/conversao-temperatura2:v1
          ports:
-          - containerPort: 80
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30000
+  type: NodePort
